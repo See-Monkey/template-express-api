@@ -1,19 +1,23 @@
-function isAuth(req, res, next) {
-	if (req.isAuthenticated()) return next();
-	else
-		return res.status(401).render("error", {
-			status: 401,
-			message: "You must be logged in to view this page",
-		});
-}
+import passport from "passport";
 
-function isAdmin(req, res, next) {
-	if (req.isAuthenticated() && req.user.role_id === 3) return next();
-	else
-		return res.status(403).render("error", {
-			status: 403,
-			message: "You must have an Admin role to view this page",
-		});
-}
+const requireAuth = (req, res, next) => {
+	passport.authenticate("jwt", { session: false }, (err, user) => {
+		if (err) return next(err);
+		if (!user) return res.status(401).json({ message: "Unauthorized" });
 
-export { isAuth, isAdmin };
+		req.user = user;
+		next();
+	})(req, res, next);
+};
+
+const requireAdmin = [
+	requireAuth,
+	(req, res, next) => {
+		if (req.user.role !== "ADMIN") {
+			return res.status(403).json({ message: "Forbidden" });
+		}
+		next();
+	},
+];
+
+export { requireAuth, requireAdmin };

@@ -1,41 +1,17 @@
 import { Router } from "express";
-import passport from "passport";
-import { isAuth } from "../middleware/auth.js";
-import {
-	validateUser,
-	validateMessage,
-	validateUpgrade,
-	handleValidationErrors,
-} from "../middleware/validators.js";
-
+import { requireAuth, requireAdmin } from "../middleware/auth.js";
 import userController from "../controllers/userController.js";
 
 const router = Router();
 
-router.get("/", userController.getIndex);
+router.get("/me", requireAuth, userController.getMe);
+router.patch("/me", requireAuth, userController.updateMe);
+router.patch("/me/password", requireAuth, userController.changeMyPassword);
 
-// passport login route
-router.post(
-	"/login",
-	passport.authenticate("local", {
-		successRedirect: "/",
-		failureRedirect: "/login",
-	}),
-);
+router.get("/", requireAdmin, userController.getAllUsers);
 
-// passport logout route
-router.post("/logout", (req, res, next) => {
-	req.logout((err) => {
-		if (err) return next(err);
-		res.redirect("/");
-	});
-});
+router.get("/:id", userController.getPublicProfile);
 
-router.post(
-	"/register",
-	validateUser,
-	handleValidationErrors("register"),
-	userController.register,
-);
+router.delete("/:id", requireAdmin, userController.deleteUser);
 
 export default router;

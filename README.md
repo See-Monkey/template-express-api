@@ -1,7 +1,7 @@
-# express project
+# express backend API
 
 Express
-EJS
 PostgreSQL
 Passport
+JWT
 Prisma
