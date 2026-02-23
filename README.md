@@ -1,4 +1,4 @@
-# express backend API
+# Express Backend API
 
 Express
 PostgreSQL
