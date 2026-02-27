@@ -5,9 +5,9 @@
 	"description": "Express PostgreSQL Passport JWT Prisma",
 	"main": "app.js",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
-		"dev": "NODE_ENV=development node --watch app.js",
-		"start": "NODE_ENV=production node app.js",
+		"test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+		"dev": "NODE_ENV=development node --watch server.js",
+		"start": "NODE_ENV=production node server.js",
 		"seed": "node config/seed.js",
 		"prisma:generate": "prisma generate",
 		"prisma:migrate": "prisma migrate dev",
@@ -37,6 +37,8 @@
 		"pg": "^8.18.0"
 	},
 	"devDependencies": {
-		"prisma": "^7.4.0"
+		"jest": "^30.2.0",
+		"prisma": "^7.4.0",
+		"supertest": "^7.2.2"
 	}
 }

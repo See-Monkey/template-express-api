@@ -23,6 +23,15 @@ app.use(express.json());
 configurePassport();
 app.use(passport.initialize());
 
+// Health check
+app.get("/", (req, res) => {
+	res.json({
+		name: "expressAPI",
+		version: "1.0.0",
+		status: "OK",
+	});
+});
+
 // custom routers
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
@@ -35,8 +44,4 @@ app.use((req, res) => {
 // catch middleware errors
 app.use(errorHandler);
 
-// server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-	console.log(`Server running on http://localhost:${PORT}`);
-});
+export default app;
