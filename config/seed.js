@@ -1,3 +1,4 @@
+import "./env.js";
 import { prisma } from "./prisma.js";
 
 async function main() {
