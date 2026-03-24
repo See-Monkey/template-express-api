@@ -25,15 +25,12 @@ export const validateUser = [
 	body("lastName").trim().notEmpty().withMessage("Last name is required"),
 ];
 
-export function handleValidationErrors(view) {
-	return (req, res, next) => {
-		const errors = validationResult(req);
-		if (!errors.isEmpty()) {
-			return res.status(400).render(view, {
-				errors: errors.array(),
-				userInput: req.body,
-			});
-		}
-		next();
-	};
+export function handleValidationErrors(req, res, next) {
+	const errors = validationResult(req);
+	if (!errors.isEmpty()) {
+		return res.status(400).json({
+			errors: errors.array(),
+		});
+	}
+	next();
 }
